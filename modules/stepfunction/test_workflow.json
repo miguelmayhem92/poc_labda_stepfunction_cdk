@@ -1,0 +1,10 @@
+{
+    "StartAt": "orchestrator",
+    "States": {
+        "orchestrator": {
+            "Type": "Task",
+            "Resource":"arn:aws:lambda:eu-west-3:133208490995:function:orchestrator_function_name",
+            "End": true
+        }
+    }
+}
