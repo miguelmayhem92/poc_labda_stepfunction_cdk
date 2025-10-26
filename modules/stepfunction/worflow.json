@@ -1,0 +1,57 @@
+{
+    "StartAt": "Decide next",
+    "States": {
+        "Decide next": {
+            "Type": "Task",
+            "Resource":"arn:aws:lambda:::function:decider",
+            "ResultPath": "$.nextAction",
+            "Next": "Choose action"
+        },
+        "Choose action": {
+            "Type": "Choice",
+            "Choices": [
+                {
+                    "Variable": "$.nextAction",
+                    "StringEquals": "DONE",
+                    "Next": "Process finished"
+                },
+                {
+                    "Variable": "$.nextAction",
+                    "StringEquals": "1",
+                    "Next": "Job 1"
+                },
+                {
+                    "Variable": "$.nextAction",
+                    "StringEquals": "2",
+                    "Next": "Job 2"
+                },
+                {
+                    "Variable": "$.nextAction",
+                    "StringEquals": "3",
+                    "Next": "Job 3"
+                }
+            ]
+        },
+        "Job 1": {
+            "Type": "Task",
+            "Resource":"arn:aws:lambda:::function:job1",
+            "ResultPath": "$.jobResult",
+            "Next": "Decide next"
+        },
+        "Job 2": {
+            "Type": "Task",
+            "Resource":"arn:aws:lambda:::function:job2",
+            "ResultPath": "$.jobResult",
+            "Next": "Decide next"
+        },
+        "Job 3": {
+            "Type": "Task",
+            "Resource":"arn:aws:lambda:::function:job3",
+            "ResultPath": "$.jobResult",
+            "Next": "Decide next"
+        },
+        "Process finished": {
+            "Type": "Succeed"
+        }
+    }
+}
