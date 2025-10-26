@@ -16,6 +16,20 @@ export class PocLabdaStepfunctionCdkStack extends cdk.Stack {
       functionName: 'orchestrator_function_name'
     });
 
+    const worker_1_lambda = new lambda.Function(this, 'worker_1', {
+      runtime: lambda.Runtime.PYTHON_3_11,
+      handler: 'main_lambda1.handler',
+      code: lambda.Code.fromAsset("./modules/lambda1"),
+      functionName: 'worker_1'
+    });
+
+    const worker_2_lambda = new lambda.Function(this, 'worker_2', {
+      runtime: lambda.Runtime.PYTHON_3_11,
+      handler: 'main_lambda2.handler',
+      code: lambda.Code.fromAsset("./modules/lambda2"),
+      functionName: 'worker_2'
+    });
+
      const iam_role = new iam.Role(this, 'poc_lambda_state_gato', {
       assumedBy: new iam.ServicePrincipal('states.amazonaws.com'),
       roleName:'poc_lambda_statemachine_role'

@@ -4,7 +4,55 @@
         "orchestrator": {
             "Type": "Task",
             "Resource":"arn:aws:lambda:eu-west-3:133208490995:function:orchestrator_function_name",
-            "End": true
+            "Next": "parallelor"
+        },
+        "parallelor": {
+            "Type": "Parallel",
+            "End": true,
+            "Branches": [
+                {
+                    "StartAt": "worker 1 map",
+                    "States": {
+                        "worker 1 map": {
+                            "Type": "Map",
+                            "InputPath": "$.1",
+                            "MaxConcurrency": 2,
+                            "End": true,
+                            "Iterator": {
+                                "StartAt": "worker 1",
+                                "States": {
+                                    "worker 1": {
+                                        "Type": "Task",
+                                        "Resource": "arn:aws:lambda:eu-west-3:133208490995:function:worker_1",
+                                        "End": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "StartAt": "worker 2 map",
+                    "States": {
+                        "worker 2 map": {
+                            "Type": "Map",
+                            "InputPath": "$.2",
+                            "MaxConcurrency": 2,
+                            "End": true,
+                            "Iterator": {
+                                "StartAt": "worker 2",
+                                "States": {
+                                    "worker 2": {
+                                        "Type": "Task",
+                                        "Resource": "arn:aws:lambda:eu-west-3:133208490995:function:worker_2",
+                                        "End": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
         }
     }
 }
