@@ -8,7 +8,8 @@
         },
         "parallelor": {
             "Type": "Parallel",
-            "End": true,
+            "ResultPath": "$.ParallelResultPath",
+            "Next": "consolidate",
             "Branches": [
                 {
                     "StartAt": "worker 1 map",
@@ -53,6 +54,12 @@
                     }
                 }
             ]
+        },
+        "consolidate":{
+            "Type": "Task",
+            "Resource":"arn:aws:lambda:eu-west-3:133208490995:function:consolidator",
+            "End": true,
+            "InputPath": "$.ParallelResultPath"
         }
     }
 }

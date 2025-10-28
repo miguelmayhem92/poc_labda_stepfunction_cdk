@@ -30,6 +30,13 @@ export class PocLabdaStepfunctionCdkStack extends cdk.Stack {
       functionName: 'worker_2'
     });
 
+    const worker_consolidator = new lambda.Function(this, 'consolidator', {
+      runtime: lambda.Runtime.PYTHON_3_11,
+      handler: 'main.handler',
+      code: lambda.Code.fromAsset("./modules/consolidator"),
+      functionName: 'consolidator'
+    });
+
      const iam_role = new iam.Role(this, 'poc_lambda_state_gato', {
       assumedBy: new iam.ServicePrincipal('states.amazonaws.com'),
       roleName:'poc_lambda_statemachine_role'
@@ -44,7 +51,7 @@ export class PocLabdaStepfunctionCdkStack extends cdk.Stack {
 
 
     const myStateMachine = new sfn.StateMachine(this, 'my_workflow_poc', {
-      definitionBody: sfn.DefinitionBody.fromFile("./modules/stepfunction/test_workflow.json"),
+      definitionBody: sfn.DefinitionBody.fromFile("./modules/stepfunction/workflow.json"),
       stateMachineName: "my_workflow_poc_name",
       role: iam_role
     });
